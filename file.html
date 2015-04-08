@@ -1,0 +1,89 @@
+<!doctype html>
+<html ng-app="myapp">
+  <head>
+    <title>Contacts</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <style> body { margin-top: 20px; } </style>
+
+    <script type="text/javascript" charset="utf-8">
+      var contacts = [
+        {name: 'Yisel Nuray', city: 'Sweland', phone: "5924293293", email: "yeyk@gmail.com"},
+        {name: 'Adrian Thame', city: 'Moscow', phone: "32132823", email: "adrianp91@gmail.com"},
+        {name: 'Karla Garcia', city: 'Habana Cuba', phone: "3023223443", email: "karla92@gmail.com"}
+      ];
+
+      var app = angular.module("myapp", []);
+
+      app.controller("myCtrl", function($scope) {
+        $scope.contacts = contacts;
+
+        $scope.add_contact = function(f_name, f_phone, f_city, f_email) {
+            contact = {name: f_name, city: f_city, phone: f_phone, email: f_email};
+            contacts.push(contact);
+        };
+
+        $scope.delete_contact = function(contact) {
+            var index = contacts.indexOf(contact);
+            contacts.splice(index, 1);
+        };
+
+      });
+    </script>
+
+  </head>
+
+  <body data-ng-controller="myCtrl">
+    <div class="container-fluid">
+        <h1> Contact list </h1>
+        <div class="row">
+            <div class="col-md-3 well">
+                <h3>Add new</h3>
+                <div>
+                    <input type="text" placeholder="Name: John Doe" class="form-control" data-ng-model="f_name"> <br>
+                    <input type="text" placeholder="Phone: +023298292" class="form-control" data-ng-model="f_phone"> <br>
+                    <input type="text" placeholder="City: Florida" class="form-control" data-ng-model="f_city"> <br>
+                    <input type="text" placeholder="Email: jdoe@nasa.gov" class="form-control" data-ng-model="f_email"> <br>
+                    <button class="btn btn-primary btn-large" data-ng-click="add_contact(f_name, f_phone, f_city, f_email)">+</button>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <input type="text" placeholder="Filter by" class="form-control" data-ng-model="name" />
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Delete</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="contact in contacts | orderBy: 'city' | filter: name">
+                            <td> {{contact.name}}</td>
+                            <td> {{contact.phone}}</td>
+                            <td> {{contact.city}}</td>
+                            <td>
+                                <button class="btn btn-danger btn-lg" ng-click="delete_contact(contact)">
+                                    <strong>&times</strong>
+                                </button>
+                            </td>
+                            <td>
+                              <a target="_top"
+                                 ng-href="mailto:{{contact.email}}?Subject=Hello%20{{contact.name}}"
+                                 class="btn btn-success btn-lg">
+                                <strong>&#64;</strong>
+                              </a>
+                            </td>
+                        </tr>
+                    <tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
